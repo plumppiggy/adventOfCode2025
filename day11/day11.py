@@ -25,5 +25,24 @@ def main():
   part_one_ans = dfs(src)
   print("Part One:", part_one_ans)
 
+  src = "svr"
+  memo2 = {}
+  # keep track of paths, have to go to fft and dac and end up at out
+  def dfs2(node):
+    if node[0] == "out": 
+      return 1 if node[1] and node[2] else 0
+    if node in memo2:
+      return memo2[node]
+    memo2[node] = 0
+    for child in dict(graph)[node[0]]:
+      has_fft = node[1] or (child == "fft")
+      has_dac = node[2] or (child == "dac")
+      memo2[node] += dfs2((child, has_fft, has_dac))
+
+    return memo2[node]
+    
+  part_two_ans = dfs2((src, False, False))
+  print("Part Two:", part_two_ans)
+  
 if __name__ == "__main__":
   main()
